@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\TestController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,5 +22,14 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
 });
+
+Route::prefix('test')->group(function () {
+    Route::get('/index',        [TestController::class, 'index'])->name('test.index');     // GET todos
+    Route::get('/create',       [TestController::class, 'create'])->name('test.create');   // CREA uno
+    Route::get('/read/{id}',    [TestController::class, 'read'])->name('test.read');       // GET uno
+    Route::get('/update/{id}',  [TestController::class, 'update'])->name('test.update');   // UPDATE uno
+    Route::get('/delete/{id}',  [TestController::class, 'delete'])->name('test.delete');   // DELETE uno
+});
+
 
 require __DIR__.'/auth.php';
