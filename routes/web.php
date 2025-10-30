@@ -33,3 +33,9 @@ Route::prefix('test')->group(function () {
 
 
 require __DIR__.'/auth.php';
+
+use App\Http\Controllers\CourseController;
+
+Route::resource('courses', CourseController::class);
+Route::view('/kits', 'kits.index')->name('kits.index');
+
