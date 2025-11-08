@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Course;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -8,16 +9,18 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('courses', function (Blueprint $table) {
-            $table->id();                                // id big int unsigned
-            $table->string('code', 20)->unique();        // VARCHAR(20)
-            $table->string('name', 100);                 // VARCHAR(100)
-            $table->text('description')->nullable();     // TEXT
-            $table->unsignedTinyInteger('credits')->default(0);  // UNSIGNED TINYINT
-            $table->unsignedSmallInteger('hours')->default(0);   // UNSIGNED SMALLINT
-            $table->decimal('price', 8, 2)->default(0);  // DECIMAL(8,2)
-            $table->date('start_date')->nullable();      // DATE
-            $table->date('end_date')->nullable();        // DATE
-            $table->boolean('published')->default(false);// BOOLEAN
+            $table->id();   
+            $table->foreignId('course_id')->constrained()->cascadeOnDelete(); 
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();                              
+            $table->string('code', 20)->unique();        
+            $table->string('name', 100);                
+            $table->text('description')->nullable();     
+            $table->unsignedTinyInteger('credits')->default(0);
+            $table->unsignedSmallInteger('hours')->default(0);   
+            $table->decimal('price', 8, 2)->default(0);  
+            $table->date('start_date')->nullable();      
+            $table->date('end_date')->nullable();        
+            $table->boolean('published')->default(false);
 
             // Relación con users (opcional: dueño/profesor)
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
@@ -28,11 +31,12 @@ return new class extends Migration {
             // Soft deletes + timestamps
             $table->softDeletes();
             $table->timestamps();
+            $table->unique(['course_id','user_id']);
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('courses');
+        Schema::dropIfExists('courses_user');
     }
 };

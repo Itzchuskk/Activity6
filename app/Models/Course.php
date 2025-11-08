@@ -12,8 +12,17 @@ class Course extends Model
 
     protected $fillable = [
         'robotics_kit_id',
-        'code','name','description','credits','hours','price',
-        'start_date','end_date','published','user_id','options',
+        'code',
+        'name',
+        'description',
+        'credits',
+        'hours',
+        'price',
+        'start_date',
+        'end_date',
+        'published',
+        'user_id',
+        'options',
         'image_path',
     ];
 
@@ -31,7 +40,15 @@ class Course extends Model
 
     public function getImageUrlAttribute(): ?string
     {
-        if (!$this->image_path) return null;
+        if (!$this->image_path)
+            return null;
         return Storage::disk('public')->url($this->image_path);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(\App\Models\User::class)
+            ->withPivot(['role', 'enrolled_at'])
+            ->withTimestamps();
     }
 }
